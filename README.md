@@ -10,8 +10,8 @@
 
 | Build Server | Platform | Build Status |
 | ------------ | -------- | ------------ |
-| Azure Pipelines| Windows |[![Build Status](https://dev.azure.com/cocosip/AutoS3/_apis/build/status/cocosip.AutoS3?branchName=master&jobName=Windows)](https://dev.azure.com/cocosip/AutoS3/_build/latest?definitionId=23&branchName=master)|
-| Azure Pipelines| Linux |[![Build Status](https://dev.azure.com/cocosip/AutoS3/_apis/build/status/cocosip.AutoS3?branchName=master&jobName=Linux)](https://dev.azure.com/cocosip/AutoS3/_build/latest?definitionId=23&branchName=master)
+| Azure Pipelines| Windows |[![Build Status](https://dev.azure.com/cocosip/AutoS3/_apis/build/status/cocosip.AutoS3?branchName=master&jobName=Windows)](https://dev.azure.com/cocosip/AutoS3/_build/latest?definitionId=24&branchName=master)|
+| Azure Pipelines| Linux |[![Build Status](https://dev.azure.com/cocosip/AutoS3/_apis/build/status/cocosip.AutoS3?branchName=master&jobName=Linux)](https://dev.azure.com/cocosip/AutoS3/_build/latest?definitionId=24&branchName=master)
 
 | Package  | Version | Downloads|
 | -------- | ------- | -------- |
