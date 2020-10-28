@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\build\common.props" />
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>AutoS3</AssemblyName>
+    <PackageId>AutoS3</PackageId>
+    <RootNamespace>AutoS3</RootNamespace>
+    <Description>AWSSDK.S3 SDK Client Manager</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.5.3.9" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.9" />
+  </ItemGroup>
+
+</Project>
