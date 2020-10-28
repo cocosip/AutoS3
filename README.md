@@ -1,4 +1,4 @@
-# AmazonS3  AWSSDK.S3 SDK封装
+# AutoS3  AWSSDK.S3 SDK封装
 
 ## 特性
 
