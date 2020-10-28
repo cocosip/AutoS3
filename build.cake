@@ -185,7 +185,7 @@ Task("Default")
    .IsDependentOn("Publish")
    .Does(() =>
    {
-      Information("AmazonKS3 build complete!");
+      Information("AutoS3 build complete!");
    });
 
 RunTarget(parameters.Target);
