@@ -26,7 +26,7 @@ namespace AutoS3.Sample
             services
                 .AddLogging(l => l.AddConsole())
                 .AddAutoS3()
-                .AddKS3ClientBuilder()
+                .AddAutoKS3()
                 .Configure<SampleAppOptions>(configuration.GetSection("SampleAppOptions"))
                 .AddSingleton<SampleAppService>();
 

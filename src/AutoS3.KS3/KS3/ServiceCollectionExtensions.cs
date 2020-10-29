@@ -4,7 +4,7 @@ namespace AutoS3.KS3
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddKS3ClientBuilder(this IServiceCollection services)
+        public static IServiceCollection AddAutoKS3(this IServiceCollection services)
         {
             services.AddTransient<IS3ClientBuilder, KS3ClientBuilder>();
 
