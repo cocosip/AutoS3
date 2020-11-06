@@ -24,19 +24,33 @@ namespace AutoS3.Sample
         {
             return _s3ClientFactory.GetOrAddClient(_options.AccessKeyId, _options.SecretAccessKey, () =>
             {
-                return new S3ClientConfiguration()
+                var configuration = new S3ClientConfiguration()
                 {
-                    Vendor = S3VendorType.KS3,
+                    Vendor = _options.S3Vendor,
                     AccessKeyId = _options.AccessKeyId,
                     SecretAccessKey = _options.SecretAccessKey,
-                    Config = new AmazonKS3Config()
-                    {
-                        ServiceURL = _options.ServerUrl,
-                        ForcePathStyle = true,
-                        SignatureVersion = "2.0"
-                    },
                     MaxClient = 10
                 };
+
+                if (_options.S3Vendor == S3VendorType.Amazon)
+                {
+                    configuration.Config = new AmazonS3Config()
+                    {
+                        ServiceURL = _options.ServerUrl,
+                        ForcePathStyle = _options.ForcePathStyle,
+                        SignatureVersion = _options.SignatureVersion
+                    };
+                }
+                else
+                {
+                    configuration.Config = new AmazonKS3Config()
+                    {
+                        ServiceURL = _options.ServerUrl,
+                        ForcePathStyle = _options.ForcePathStyle,
+                        SignatureVersion = _options.SignatureVersion
+                    };
+                }
+                return configuration;
             });
         }
 
