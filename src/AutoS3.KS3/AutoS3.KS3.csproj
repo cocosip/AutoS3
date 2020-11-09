@@ -10,7 +10,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="AmazonKS3" Version="1.4.1" />
+    <PackageReference Include="AmazonKS3" Version="1.4.2" />
   </ItemGroup>
   
   <ItemGroup>
