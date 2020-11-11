@@ -2,7 +2,7 @@
 
   <Import Project="..\..\build\common.props" />
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>AutoS3.KS3</AssemblyName>
     <PackageId>AutoS3.KS3</PackageId>
     <RootNamespace>AutoS3</RootNamespace>
