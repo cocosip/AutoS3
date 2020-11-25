@@ -22,7 +22,7 @@ namespace AutoS3.Sample
 
         protected IAmazonS3 GetClient()
         {
-            return _s3ClientFactory.GetOrAddClient(_options.AccessKeyId, _options.SecretAccessKey, () =>
+            return _s3ClientFactory.GetOrAdd("default", () =>
             {
                 var configuration = new S3ClientConfiguration()
                 {

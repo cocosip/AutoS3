@@ -27,7 +27,15 @@ namespace AutoS3
         /// <param name="secretAccessKey"></param>
         /// <param name="factory"></param>
         /// <returns></returns>
-        IAmazonS3 GetOrAddClient(string accessKeyId, string secretAccessKey, Func<S3ClientConfiguration> factory);
+        IAmazonS3 GetOrAdd(string accessKeyId, string secretAccessKey, Func<S3ClientConfiguration> factory);
+
+        /// <summary>
+        /// Get IAmazonS3 with name, if not exist create a new client with configuration action
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="factory"></param>
+        /// <returns></returns>
+        IAmazonS3 GetOrAdd(string name, Func<S3ClientConfiguration> factory);
 
         /// <summary>
         /// Whether there are any s3 client pool with accessKeyId,secretAccessKey was in the dict

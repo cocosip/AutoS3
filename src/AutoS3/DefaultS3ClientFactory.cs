@@ -68,13 +68,24 @@ namespace AutoS3
         /// <param name="secretAccessKey"></param>
         /// <param name="factory"></param>
         /// <returns></returns>
-        public IAmazonS3 GetOrAddClient(string accessKeyId, string secretAccessKey, Func<S3ClientConfiguration> factory)
+        public IAmazonS3 GetOrAdd(string accessKeyId, string secretAccessKey, Func<S3ClientConfiguration> factory)
         {
             var name = AutoS3Util.CalculateClientName(accessKeyId, secretAccessKey);
+            return GetOrAdd(name, factory);
+        }
+
+        /// <summary>
+        /// Get IAmazonS3 with name, if not exist create a new client with configuration action
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="factory"></param>
+        /// <returns></returns>
+        public IAmazonS3 GetOrAdd(string name, Func<S3ClientConfiguration> factory)
+        {
             var s3Client = GetClientInternal(name, factory(), true);
             if (s3Client == null)
             {
-                throw new ArgumentNullException($"Could not find any s3 client with  AccessKeyId '{accessKeyId}', SecretAccessKey:{secretAccessKey},and also could not create new client!");
+                throw new ArgumentNullException($"Could not find any s3 client with name '{name}',and also could not create new client!");
             }
             return s3Client;
         }

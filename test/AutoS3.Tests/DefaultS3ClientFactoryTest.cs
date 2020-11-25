@@ -45,7 +45,7 @@ namespace AutoS3.Tests
 
             IS3ClientFactory s3ClientFactory = new DefaultS3ClientFactory(mockLogger.Object, mockS3ClientConfigurationSelector.Object, mockS3ClientPoolFactory.Object);
 
-            var s3Client1 = s3ClientFactory.GetOrAddClient("123456", "123456", () =>
+            var s3Client1 = s3ClientFactory.GetOrAdd("123456", "123456", () =>
             {
                 return new S3ClientConfiguration()
                 {
@@ -59,7 +59,7 @@ namespace AutoS3.Tests
 
             mockS3ClientPoolFactory.Verify(x => x.Create(It.IsAny<S3ClientConfiguration>()), Times.Once);
 
-            var s3Client3 = s3ClientFactory.GetOrAddClient("111", "222", () =>
+            var s3Client3 = s3ClientFactory.GetOrAdd("111", "222", () =>
             {
                 return new S3ClientConfiguration()
                 {
