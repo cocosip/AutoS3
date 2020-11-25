@@ -159,7 +159,7 @@ namespace AutoS3.Sample
                 AutoCloseStream = true,
                 Key = key,
                 FilePath = _options.SimpleUploadFilePath,
-                CannedACL = S3CannedACL.Private,
+                //CannedACL = S3CannedACL.Private,
             };
             //进度条
             putObjectRequest.StreamTransferProgress += (sender, args) =>
