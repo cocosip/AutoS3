@@ -12,9 +12,13 @@
 
         public bool ForcePathStyle { get; set; } = true;
 
+        public bool UseChunkEncoding { get; set; } = false;
+
         public string SignatureVersion { get; set; }
 
         public string DefaultBucket { get; set; }
+
+        public bool UseLocalFile { get; set; } = false;
 
         public string SimpleUploadFilePath { get; set; }
 

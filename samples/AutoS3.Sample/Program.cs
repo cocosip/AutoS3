@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Threading.Tasks;
 
 namespace AutoS3.Sample
 {
@@ -13,7 +12,7 @@ namespace AutoS3.Sample
 
         static void Main(string[] args)
         {
-            Console.WriteLine("使用AWSSDK.S3 SDK调用金山云KS3");
+            Console.WriteLine("使用AWSSDK.S3 SDK 调用存储测试");
 
             IConfigurationBuilder builder = new ConfigurationBuilder();
             builder
@@ -24,7 +23,12 @@ namespace AutoS3.Sample
             var configuration = builder.Build();
             var services = new ServiceCollection();
             services
-                .AddLogging(l => l.AddConsole())
+                .AddLogging(l =>
+                {
+                    l.AddConsole();
+                    l.AddAWSProvider();
+                    l.SetMinimumLevel(LogLevel.Debug);
+                })
                 .AddAutoS3()
                 .AddAutoKS3()
                 .Configure<SampleAppOptions>(configuration.GetSection("SampleAppOptions"))
@@ -56,9 +60,9 @@ namespace AutoS3.Sample
             await _sampleAppService.SimpleGetObjectAsync(simpleUploadKey);
 
             //获取预授权地址
-            var url1 = _sampleAppService.GetPreSignedURL(simpleUploadKey);
+            _ = _sampleAppService.GetPreSignedURL(simpleUploadKey);
             //生成预授权地址
-            var url2 = _sampleAppService.GeneratePreSignedURL(simpleUploadKey);
+            _ = _sampleAppService.GeneratePreSignedURL(simpleUploadKey);
 
             //下载Copy
             await _sampleAppService.SimpleGetObjectAsync(simpleUploadKey);
@@ -69,17 +73,16 @@ namespace AutoS3.Sample
             //删除文件
             await _sampleAppService.DeleteObject(simpleUploadKey);
             await _sampleAppService.DeleteObject(copyKey);
-            ////分片上传
-            //var multipartUploadKey = await MultipartUpload();
 
-            ////Url
-            //var multipartUrl = GeneratePreSignedURL(multipartUploadKey);
+            //分片上传
+            var multipartUploadKey = await _sampleAppService.MultipartUploadAsync();
 
-            ////获取文件信息
-            //await GetMetadata(multipartUploadKey);
+            //Url
+            _ = _sampleAppService.GeneratePreSignedURL(multipartUploadKey);
 
-            ////获取ACL
-            //await GetACL(multipartUploadKey);
+            //删除文件
+            await _sampleAppService.DeleteObject(multipartUploadKey);
+
 
         }
 
