@@ -4,7 +4,7 @@
             "defaults": {
                 "hostname": "{service}.{region}.{dnsSuffix}",
                 "protocols": [
-                    "http"
+                    "https"
                 ],
                 "signatureVersions": [
                     "v2"

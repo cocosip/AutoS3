@@ -1,20 +1,24 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using AmazonKS3;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AutoS3.Sample
 {
     public class SampleAppService
     {
+        private readonly ILogger _logger;
         private readonly SampleAppOptions _options;
         private readonly IS3ClientFactory _s3ClientFactory;
-        public SampleAppService(IOptions<SampleAppOptions> options, IS3ClientFactory s3ClientFactory)
+        public SampleAppService(ILogger<SampleAppService> logger, IOptions<SampleAppOptions> options, IS3ClientFactory s3ClientFactory)
         {
+            _logger = logger;
             _options = options.Value;
             _s3ClientFactory = s3ClientFactory;
         }
@@ -60,10 +64,10 @@ namespace AutoS3.Sample
         public async Task ListBucketsAsync()
         {
             var listBucketsResponse = await GetClient().ListBucketsAsync();
-            Console.WriteLine("---列出Buckets---,OwnerId:{0}", listBucketsResponse.Owner.Id);
+            _logger.LogInformation("---列出Buckets---,OwnerId:{0}", listBucketsResponse.Owner.Id);
             foreach (var bucket in listBucketsResponse.Buckets)
             {
-                Console.WriteLine("BucketName:{0},创建时间:{1}", bucket.BucketName, bucket.CreationDate.ToString("yyyy-MM-dd HH:mm"));
+                _logger.LogInformation("BucketName:{0},创建时间:{1}", bucket.BucketName, bucket.CreationDate.ToString("yyyy-MM-dd HH:mm"));
             }
         }
 
@@ -71,7 +75,7 @@ namespace AutoS3.Sample
         /// </summary>
         public async Task GetAclAsync()
         {
-            Console.WriteLine("---获取当前Bucket的权限---");
+            _logger.LogInformation("---获取当前Bucket的权限---");
 
             var getACLResponse = await GetClient().GetACLAsync(new GetACLRequest()
             {
@@ -80,7 +84,7 @@ namespace AutoS3.Sample
 
             foreach (var grant in getACLResponse.AccessControlList.Grants)
             {
-                Console.WriteLine("当前Bucket权限:{0}", grant.Permission.Value);
+                _logger.LogInformation("当前Bucket权限:{0}", grant.Permission.Value);
             }
         }
 
@@ -90,7 +94,7 @@ namespace AutoS3.Sample
         public async Task ListObjectsV2Async(string prefix = "", string delimiter = "", int count = 10)
         {
             //查询文件
-            Console.WriteLine("---列出Bucket,'Prefix:{0}','Delimiter:{1}','Count:{2}'---", prefix, delimiter, count);
+            _logger.LogInformation("---列出Bucket,'Prefix:{0}','Delimiter:{1}','Count:{2}'---", prefix, delimiter, count);
 
             var listObjectsV2Response = await GetClient().ListObjectsV2Async(new ListObjectsV2Request()
             {
@@ -101,7 +105,7 @@ namespace AutoS3.Sample
             });
             foreach (var s3Object in listObjectsV2Response.S3Objects)
             {
-                Console.WriteLine("S3对象Key:{0}", s3Object.Key);
+                _logger.LogInformation("S3对象Key:{0}", s3Object.Key);
             }
         }
 
@@ -111,7 +115,7 @@ namespace AutoS3.Sample
         public async Task ListObjectsAsync(string prefix = "", string delimiter = "", int count = 10)
         {
             //查询文件
-            Console.WriteLine("---列出Bucket前10个文件---");
+            _logger.LogInformation("---列出Bucket前10个文件---");
 
             var listObjectsResponse = await GetClient().ListObjectsAsync(new ListObjectsRequest()
             {
@@ -123,7 +127,7 @@ namespace AutoS3.Sample
 
             foreach (var s3Object in listObjectsResponse.S3Objects)
             {
-                Console.WriteLine("S3对象Key:{0}", s3Object.Key);
+                _logger.LogInformation("S3对象Key:{0}", s3Object.Key);
             }
         }
 
@@ -134,7 +138,7 @@ namespace AutoS3.Sample
         private async Task GetObjectAsync(string key)
         {
             //查询文件
-            Console.WriteLine("---获取指定的文件---");
+            _logger.LogInformation("---获取指定的文件---");
 
             var getObjectResponse = await GetClient().GetObjectAsync(new GetObjectRequest()
             {
@@ -142,34 +146,56 @@ namespace AutoS3.Sample
                 Key = key,
             });
 
-            Console.WriteLine("获取对象返回:对象Key:{0},ETag:{1}", getObjectResponse?.Key, getObjectResponse?.ETag);
+            _logger.LogInformation("获取对象返回:对象Key:{0},ETag:{1}", getObjectResponse?.Key, getObjectResponse?.ETag);
         }
 
         /// <summary>简单上传文件
         /// </summary>
         public async Task<string> SimpleUploadAsync()
         {
-            var ext = _options.SimpleUploadFilePath.Substring(_options.SimpleUploadFilePath.LastIndexOf('.'));
-            var key = $"{Guid.NewGuid()}{ext}";
-            Console.WriteLine("---上传简单文件,上传Key:{0}---", key);
+
+            var ext = ".txt";
+
+            if (_options.UseLocalFile)
+            {
+                ext = _options.SimpleUploadFilePath.Substring(_options.SimpleUploadFilePath.LastIndexOf('.'));
+            }
+
+            var key = $"test/{Guid.NewGuid()}{ext}";
+            _logger.LogInformation("---上传简单文件,上传Key:{0}---", key);
 
             var putObjectRequest = new PutObjectRequest()
             {
                 BucketName = _options.DefaultBucket,
                 AutoCloseStream = true,
                 Key = key,
-                FilePath = _options.SimpleUploadFilePath,
-                //CannedACL = S3CannedACL.Private,
+                UseChunkEncoding = _options.UseChunkEncoding,
             };
+
+            //使用本地测试文件
+            if (_options.UseLocalFile)
+            {
+                putObjectRequest.FilePath = _options.SimpleUploadFilePath;
+            }
+            else
+            {
+
+                var ms = new MemoryStream(Encoding.UTF8.GetBytes("Hello AutoS3!"));
+                ms.Seek(0, SeekOrigin.Begin);
+
+                //自动生成流
+                putObjectRequest.InputStream = ms;
+            }
+
             //进度条
             putObjectRequest.StreamTransferProgress += (sender, args) =>
             {
-                Console.WriteLine("ProgressCallback - Progress: {0}%, TotalBytes:{1}, TransferredBytes:{2} ",
+                _logger.LogInformation("ProgressCallback - Progress: {0}%, TotalBytes:{1}, TransferredBytes:{2} ",
                     args.TransferredBytes * 100 / args.TotalBytes, args.TotalBytes, args.TransferredBytes);
             };
 
             var putObjectResponse = await GetClient().PutObjectAsync(putObjectRequest);
-            Console.WriteLine("简单上传成功,Etag:{0}", putObjectResponse.ETag);
+            _logger.LogInformation("简单上传成功,Etag:{0}", putObjectResponse.ETag);
             return key;
         }
 
@@ -177,7 +203,7 @@ namespace AutoS3.Sample
         /// </summary>
         public async Task SimpleGetObjectAsync(string key)
         {
-            Console.WriteLine("---简单下载文件,Key:{0}---", key);
+            _logger.LogInformation("---简单下载文件,Key:{0}---", key);
             var getObjectRequest = new GetObjectRequest()
             {
                 BucketName = _options.DefaultBucket,
@@ -186,7 +212,7 @@ namespace AutoS3.Sample
 
             var getObjectResponse = await GetClient().GetObjectAsync(getObjectRequest);
 
-            Console.WriteLine("简单下载文件成功,Key:{0}", getObjectResponse.Key);
+            _logger.LogInformation("简单下载文件成功,Key:{0}", getObjectResponse.Key);
         }
 
 
@@ -195,7 +221,7 @@ namespace AutoS3.Sample
         public string GetPreSignedURL(string key)
         {
             //获取文件下载地址
-            Console.WriteLine("---获取预授权地址---");
+            _logger.LogInformation("---获取预授权地址---");
 
             var url = GetClient().GetPreSignedURL(new GetPreSignedUrlRequest()
             {
@@ -203,7 +229,7 @@ namespace AutoS3.Sample
                 Key = key,
                 Expires = DateTime.Now.AddMinutes(5),
             });
-            Console.WriteLine("获取预授权地址:{0}", url);
+            _logger.LogInformation("获取预授权地址:{0}", url);
             return url;
         }
 
@@ -211,10 +237,10 @@ namespace AutoS3.Sample
         /// </summary>
         public string GeneratePreSignedURL(string key)
         {
-            Console.WriteLine("---生成预授权地址---");
+            _logger.LogInformation("---生成预授权地址---");
 
             var url = GetClient().GeneratePreSignedURL(_options.DefaultBucket, key, DateTime.Now.AddMinutes(10), null);
-            Console.WriteLine("生成预授权地址:{0}", url);
+            _logger.LogInformation("生成预授权地址:{0}", url);
             return url;
         }
 
@@ -223,19 +249,26 @@ namespace AutoS3.Sample
         /// </summary>
         public async Task<string> CopyObjectAsync(string key)
         {
-            var ext = key.Substring(key.LastIndexOf('.'));
+            var ext = ".txt";
+            if (!string.IsNullOrWhiteSpace(key))
+            {
+                ext = key.Substring(key.LastIndexOf('.'));
+            }
             var destinationKey = $"copyfiles/{Guid.NewGuid()}{ext}";
-            Console.WriteLine("---拷贝文件,目标:{0}---", destinationKey);
+            _logger.LogInformation("---拷贝文件,目标:{0}---", destinationKey);
 
-            var copyObjectResponse = await GetClient().CopyObjectAsync(new CopyObjectRequest()
+            var copyObjectRequest = new CopyObjectRequest()
             {
                 SourceBucket = _options.DefaultBucket,
                 DestinationBucket = _options.DefaultBucket,
                 SourceKey = key,
                 DestinationKey = destinationKey,
-            });
+            };
 
-            Console.WriteLine("拷贝文件成功,RequestId:{0},拷贝目标Key:{1}", copyObjectResponse.ResponseMetadata.RequestId, destinationKey);
+            var copyObjectResponse = await GetClient().CopyObjectAsync(copyObjectRequest);
+
+
+            _logger.LogInformation("拷贝文件成功,RequestId:{0},拷贝目标Key:{1}", copyObjectResponse.ResponseMetadata.RequestId, destinationKey);
 
             return destinationKey;
 
@@ -245,7 +278,7 @@ namespace AutoS3.Sample
         /// </summary>
         public async Task DeleteObject(string key)
         {
-            Console.WriteLine("---删除文件---,Key:{0}", key);
+            _logger.LogInformation("---删除文件---,Key:{0}", key);
 
             var deleteObjectResponse = await GetClient().DeleteObjectAsync(new DeleteObjectRequest()
             {
@@ -253,7 +286,7 @@ namespace AutoS3.Sample
                 Key = key
             });
 
-            Console.WriteLine("删除文件成功,DeleteMarker:{0}", deleteObjectResponse.DeleteMarker);
+            _logger.LogInformation("删除文件成功,DeleteMarker:{0}", deleteObjectResponse.DeleteMarker);
         }
 
 
@@ -261,8 +294,8 @@ namespace AutoS3.Sample
         /// </summary>
         public async Task<string> MultipartUploadAsync()
         {
-            var key = $"{Guid.NewGuid()}.dcm";
-            Console.WriteLine("---分片上传文件,上传Key:{0}---", key);
+            var key = $"test/{Guid.NewGuid()}.dcm";
+            _logger.LogInformation("---分片上传文件,上传Key:{0}---", key);
 
             //初始化分片上传
             var initiateMultipartUploadResponse = await GetClient().InitiateMultipartUploadAsync(new InitiateMultipartUploadRequest()
@@ -315,7 +348,7 @@ namespace AutoS3.Sample
                     }).ContinueWith(t =>
                     {
                         partETags.Add(new PartETag(t.Result.PartNumber, t.Result.ETag));
-                        Console.WriteLine("finish {0}/{1}", partETags.Count, partCount);
+                        _logger.LogInformation("finish {0}/{1}", partETags.Count, partCount);
                     }));
 
                     //分片上传
@@ -337,10 +370,10 @@ namespace AutoS3.Sample
 
             Task.WaitAll(uploadPartTasks.ToArray());
 
-            Console.WriteLine("共:{0}个PartETags", partETags.Count);
+            _logger.LogInformation("共:{0}个PartETags", partETags.Count);
 
             //列出所有分片
-            Console.WriteLine("---列出所有分片,UploadId:{0}---", uploadId);
+            _logger.LogInformation("---列出所有分片,UploadId:{0}---", uploadId);
 
             var listPartsResponse = await GetClient().ListPartsAsync(new ListPartsRequest()
             {
@@ -350,7 +383,7 @@ namespace AutoS3.Sample
             });
             foreach (var part in listPartsResponse.Parts)
             {
-                Console.WriteLine("分片序号:{0},分片ETag:{1}", part.PartNumber, part.ETag);
+                _logger.LogInformation("分片序号:{0},分片ETag:{1}", part.PartNumber, part.ETag);
             }
 
 
@@ -362,7 +395,7 @@ namespace AutoS3.Sample
                 PartETags = partETags
             });
 
-            Console.WriteLine("分片上传完成,Key:{0}", completeMultipartUploadResponse.Key);
+            _logger.LogInformation("分片上传完成,Key:{0}", completeMultipartUploadResponse.Key);
             return completeMultipartUploadResponse.Key;
         }
 
