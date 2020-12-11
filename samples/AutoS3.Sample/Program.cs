@@ -26,7 +26,6 @@ namespace AutoS3.Sample
                 .AddLogging(l =>
                 {
                     l.AddConsole();
-                    l.AddAWSProvider();
                     l.SetMinimumLevel(LogLevel.Debug);
                 })
                 .AddAutoS3()
