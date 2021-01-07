@@ -2,6 +2,9 @@
 
 namespace AutoS3
 {
+    /// <summary>
+    /// S3 Client Configuration
+    /// </summary>
     public class S3ClientConfiguration
     {
         /// <summary>
@@ -29,6 +32,10 @@ namespace AutoS3
         /// </summary>
         public int MaxClient { get; set; } = 20;
 
+        /// <summary>
+        /// Override ToString
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return $"S3ClientConfiguration:[Vendor:{Vendor},AccessKeyId:{AccessKeyId},SecretAccessKey:{SecretAccessKey},MaxClient:{MaxClient}]";

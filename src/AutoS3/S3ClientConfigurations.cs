@@ -3,12 +3,18 @@ using System.Collections.Generic;
 
 namespace AutoS3
 {
+    /// <summary>
+    /// S3Client Configurations
+    /// </summary>
     public class S3ClientConfigurations
     {
         private S3ClientConfiguration Default => GetConfiguration<DefaultS3Client>();
 
         private readonly Dictionary<string, S3ClientConfiguration> _clients;
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
         public S3ClientConfigurations()
         {
             _clients = new Dictionary<string, S3ClientConfiguration>
@@ -21,6 +27,12 @@ namespace AutoS3
             };
         }
 
+        /// <summary>
+        /// Configure Client
+        /// </summary>
+        /// <typeparam name="TClient"></typeparam>
+        /// <param name="configureAction"></param>
+        /// <returns></returns>
         public S3ClientConfigurations Configure<TClient>(
             Action<S3ClientConfiguration> configureAction)
         {
@@ -30,6 +42,12 @@ namespace AutoS3
             );
         }
 
+        /// <summary>
+        /// Configure Client by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="configureAction"></param>
+        /// <returns></returns>
         public S3ClientConfigurations Configure(
             string name,
             Action<S3ClientConfiguration> configureAction)
@@ -49,12 +67,22 @@ namespace AutoS3
             return this;
         }
 
+        /// <summary>
+        /// Configure the default
+        /// </summary>
+        /// <param name="configureAction"></param>
+        /// <returns></returns>
         public S3ClientConfigurations ConfigureDefault(Action<S3ClientConfiguration> configureAction)
         {
             configureAction(Default);
             return this;
         }
 
+        /// <summary>
+        /// Configure all client
+        /// </summary>
+        /// <param name="configureAction"></param>
+        /// <returns></returns>
         public S3ClientConfigurations ConfigureAll(Action<string, S3ClientConfiguration> configureAction)
         {
             foreach (var client in _clients)
@@ -65,11 +93,21 @@ namespace AutoS3
             return this;
         }
 
+        /// <summary>
+        /// Get configuration by generics type
+        /// </summary>
+        /// <typeparam name="TClient"></typeparam>
+        /// <returns></returns>
         public S3ClientConfiguration GetConfiguration<TClient>()
         {
             return GetConfiguration(S3ClientNameAttribute.GetClientName<TClient>());
         }
 
+        /// <summary>
+        /// Get configuration by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public S3ClientConfiguration GetConfiguration(string name)
         {
 

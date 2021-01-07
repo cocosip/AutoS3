@@ -3,6 +3,9 @@ using System;
 
 namespace AutoS3
 {
+    /// <summary>
+    /// S3 client factory
+    /// </summary>
     public interface IS3ClientFactory
     {
         /// <summary>

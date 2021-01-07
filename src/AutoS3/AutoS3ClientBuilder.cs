@@ -3,14 +3,25 @@ using Microsoft.Extensions.Logging;
 
 namespace AutoS3
 {
+    /// <summary>
+    /// AutoS3 Client builder
+    /// </summary>
     public class AutoS3ClientBuilder : IS3ClientBuilder
     {
         private readonly ILogger _logger;
+
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="logger"></param>
         public AutoS3ClientBuilder(ILogger<AutoS3ClientBuilder> logger)
         {
             _logger = logger;
         }
 
+        /// <summary>
+        /// S3Vendor
+        /// </summary>
         public S3VendorType S3Vendor => S3VendorType.Amazon;
 
         /// <summary>

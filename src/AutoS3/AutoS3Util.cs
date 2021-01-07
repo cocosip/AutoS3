@@ -3,6 +3,9 @@ using System.Text;
 
 namespace AutoS3
 {
+    /// <summary>
+    /// AutoS3 util class
+    /// </summary>
     public static class AutoS3Util
     {
 

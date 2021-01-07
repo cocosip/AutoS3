@@ -5,15 +5,25 @@ using System;
 
 namespace AutoS3.KS3
 {
+    /// <summary>
+    /// KS3 client builder
+    /// </summary>
     public class KS3ClientBuilder : IS3ClientBuilder
     {
         private readonly ILogger _logger;
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="logger"></param>
         public KS3ClientBuilder(ILogger<KS3ClientBuilder> logger)
         {
             _logger = logger;
         }
 
+        /// <summary>
+        /// S3Vendor
+        /// </summary>
         public S3VendorType S3Vendor => S3VendorType.KS3;
 
 

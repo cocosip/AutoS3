@@ -3,8 +3,17 @@ using System;
 
 namespace AutoS3
 {
+    /// <summary>
+    /// DependencyInjection
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Add AutoS3
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
         public static IServiceCollection AddAutoS3(this IServiceCollection services, Action<AutoS3Options> configure = null)
         {
             configure ??= new Action<AutoS3Options>(c => { });

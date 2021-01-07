@@ -6,6 +6,9 @@ using System.Threading;
 
 namespace AutoS3
 {
+    /// <summary>
+    /// S3 client pool
+    /// </summary>
     public class DefaultS3ClientPool : IS3ClientPool
     {
         private readonly ILogger _logger;
@@ -16,7 +19,16 @@ namespace AutoS3
         private readonly object _sync = new object();
         private readonly ConcurrentDictionary<int, IAmazonS3> _clients;
 
-        public DefaultS3ClientPool(ILogger<DefaultS3ClientPool> logger, S3ClientConfiguration configuration, IS3ClientBuilder s3ClientBuilder)
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="configuration"></param>
+        /// <param name="s3ClientBuilder"></param>
+        public DefaultS3ClientPool(
+            ILogger<DefaultS3ClientPool> logger,
+            S3ClientConfiguration configuration, 
+            IS3ClientBuilder s3ClientBuilder)
         {
             _logger = logger;
 

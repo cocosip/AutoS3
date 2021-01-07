@@ -10,6 +10,7 @@
     <RepositoryUrl>https://github.com/cocosip/AutoS3</RepositoryUrl>
     <Description>AWS S3 SDK Client Manager</Description>
     <PackageTags>Amazon,AWSSDK,KS3,S3</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <!-- https://github.com/dotnet/sourcelink -->
     <IncludeSymbols>true</IncludeSymbols>

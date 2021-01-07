@@ -2,8 +2,14 @@
 
 namespace AutoS3
 {
+    /// <summary>
+    /// S3 client builder
+    /// </summary>
     public interface IS3ClientBuilder
     {
+        /// <summary>
+        /// S3Vendor
+        /// </summary>
         public S3VendorType S3Vendor { get; }
 
         /// <summary>

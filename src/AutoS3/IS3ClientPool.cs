@@ -2,6 +2,9 @@
 
 namespace AutoS3
 {
+    /// <summary>
+    /// S3 client pool
+    /// </summary>
     public interface IS3ClientPool
     {
         /// <summary>

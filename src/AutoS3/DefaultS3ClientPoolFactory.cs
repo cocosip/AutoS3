@@ -6,18 +6,36 @@ using System.Linq;
 
 namespace AutoS3
 {
+    /// <summary>
+    /// S3 client pool factory
+    /// </summary>
     public class DefaultS3ClientPoolFactory : IS3ClientPoolFactory
     {
         private readonly ILogger _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly IEnumerable<IS3ClientBuilder> _s3ClientBuilders;
-        public DefaultS3ClientPoolFactory(ILogger<DefaultS3ClientPoolFactory> logger, IServiceProvider serviceProvider, IEnumerable<IS3ClientBuilder> s3ClientBuilders)
+
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="serviceProvider"></param>
+        /// <param name="s3ClientBuilders"></param>
+        public DefaultS3ClientPoolFactory(
+            ILogger<DefaultS3ClientPoolFactory> logger,
+            IServiceProvider serviceProvider, 
+            IEnumerable<IS3ClientBuilder> s3ClientBuilders)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
             _s3ClientBuilders = s3ClientBuilders;
         }
 
+        /// <summary>
+        /// Create s3 client pool by configuration
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public IS3ClientPool Create(S3ClientConfiguration configuration)
         {
             var logger = _serviceProvider.GetService<ILogger<DefaultS3ClientPool>>();

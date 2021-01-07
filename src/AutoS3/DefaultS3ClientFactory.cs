@@ -5,6 +5,9 @@ using System.Collections.Concurrent;
 
 namespace AutoS3
 {
+    /// <summary>
+    /// S3 client factory
+    /// </summary>
     public class DefaultS3ClientFactory : IS3ClientFactory
     {
         private readonly ILogger _logger;
@@ -14,7 +17,16 @@ namespace AutoS3
         private readonly object _sync = new object();
         private readonly ConcurrentDictionary<string, IS3ClientPool> _s3ClientPools;
 
-        public DefaultS3ClientFactory(ILogger<DefaultS3ClientFactory> logger, IS3ClientConfigurationSelector configurationSelector, IS3ClientPoolFactory s3ClientPoolFactory)
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="configurationSelector"></param>
+        /// <param name="s3ClientPoolFactory"></param>
+        public DefaultS3ClientFactory(
+            ILogger<DefaultS3ClientFactory> logger,
+            IS3ClientConfigurationSelector configurationSelector,
+            IS3ClientPoolFactory s3ClientPoolFactory)
         {
             _logger = logger;
             _configurationSelector = configurationSelector;
