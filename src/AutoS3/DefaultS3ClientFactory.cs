@@ -80,7 +80,10 @@ namespace AutoS3
         /// <param name="secretAccessKey"></param>
         /// <param name="factory"></param>
         /// <returns></returns>
-        public IAmazonS3 GetOrAdd(string accessKeyId, string secretAccessKey, Func<S3ClientConfiguration> factory)
+        public IAmazonS3 GetOrAdd(
+            string accessKeyId,
+            string secretAccessKey,
+            Func<S3ClientConfiguration> factory)
         {
             var name = AutoS3Util.CalculateClientName(accessKeyId, secretAccessKey);
             return GetOrAdd(name, factory);
@@ -116,7 +119,10 @@ namespace AutoS3
         }
 
 
-        private IAmazonS3 GetClientInternal(string name, S3ClientConfiguration configuration = default, bool createIfNotExist = false)
+        private IAmazonS3 GetClientInternal(
+            string name,
+            S3ClientConfiguration configuration = default,
+            bool createIfNotExist = false)
         {
             if (!_s3ClientPools.TryGetValue(name, out IS3ClientPool s3ClientPool))
             {
