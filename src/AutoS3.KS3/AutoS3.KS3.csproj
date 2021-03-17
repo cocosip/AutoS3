@@ -2,7 +2,7 @@
 
   <Import Project="..\..\build\common.props" />
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>AutoS3.KS3</AssemblyName>
     <PackageId>AutoS3.KS3</PackageId>
     <RootNamespace>AutoS3</RootNamespace>
@@ -10,7 +10,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="AmazonKS3" Version="1.5.6" />
+    <PackageReference Include="AmazonKS3" Version="1.6.0" />
   </ItemGroup>
   
   <ItemGroup>
