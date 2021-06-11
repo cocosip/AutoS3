@@ -27,7 +27,7 @@ namespace AutoS3
         /// <param name="s3ClientBuilder"></param>
         public DefaultS3ClientPool(
             ILogger<DefaultS3ClientPool> logger,
-            S3ClientConfiguration configuration, 
+            S3ClientConfiguration configuration,
             IS3ClientBuilder s3ClientBuilder)
         {
             _logger = logger;
@@ -55,6 +55,7 @@ namespace AutoS3
                         if (!_clients.TryAdd(index, client))
                         {
                             _logger.LogWarning("Add client to dict fail with configuration:{0}.", _configuration.ToString());
+                            client = null;
                         }
                     }
                 }

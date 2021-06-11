@@ -129,7 +129,7 @@ namespace AutoS3
                 //Can't find any s3 client pool and do not create new
                 if (!createIfNotExist)
                 {
-                    return null;
+                    throw new ArgumentNullException($"Could not find s3 client pool with name '{name}'");
                 }
 
                 lock (_sync)
@@ -141,6 +141,7 @@ namespace AutoS3
                         if (!_s3ClientPools.TryAdd(name, s3ClientPool))
                         {
                             _logger.LogWarning("Failed to add s3 client pool to dict with configuration:{0}.", configuration);
+                            s3ClientPool = null;
                         }
                     }
                 }
