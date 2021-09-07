@@ -23,7 +23,7 @@ namespace AutoS3
         /// <param name="s3ClientBuilders"></param>
         public DefaultS3ClientPoolFactory(
             ILogger<DefaultS3ClientPoolFactory> logger,
-            IServiceProvider serviceProvider, 
+            IServiceProvider serviceProvider,
             IEnumerable<IS3ClientBuilder> s3ClientBuilders)
         {
             _logger = logger;
@@ -38,15 +38,17 @@ namespace AutoS3
         /// <returns></returns>
         public IS3ClientPool Create(S3ClientConfiguration configuration)
         {
-            var logger = _serviceProvider.GetService<ILogger<DefaultS3ClientPool>>();
-
             var s3ClientBuilder = FindS3ClientBuilder(configuration.Vendor);
             if (s3ClientBuilder == null)
             {
                 throw new ArgumentNullException($"Could not find any 'IS3ClientBuilder' by vendor '{configuration.Vendor}'");
             }
 
-            IS3ClientPool s3ClientPool = new DefaultS3ClientPool(logger, configuration, s3ClientBuilder);
+            var s3ClientPool = ActivatorUtilities.CreateInstance<DefaultS3ClientPool>(
+                _serviceProvider, 
+                configuration, 
+                s3ClientBuilder);
+
             _logger.LogDebug("Create new S3ClientPool with configuration:{0}.", configuration);
             return s3ClientPool;
         }

@@ -16,7 +16,6 @@ namespace AutoS3
         private readonly IS3ClientBuilder _s3ClientBuilder;
 
         private int _sequence = 1;
-        private readonly object _sync = new object();
         private readonly ConcurrentDictionary<int, IAmazonS3> _clients;
 
         /// <summary>
@@ -45,21 +44,12 @@ namespace AutoS3
         public IAmazonS3 Get()
         {
             var index = _sequence % _configuration.MaxClient;
-            if (!_clients.TryGetValue(index, out IAmazonS3 client))
+
+            var client = _clients.GetOrAdd(index, k =>
             {
-                lock (_sync)
-                {
-                    if (!_clients.TryGetValue(index, out client))
-                    {
-                        client = _s3ClientBuilder.BuildClient(_configuration);
-                        if (!_clients.TryAdd(index, client))
-                        {
-                            _logger.LogWarning("Add client to dict fail with configuration:{0}.", _configuration.ToString());
-                            client = null;
-                        }
-                    }
-                }
-            }
+                _logger.LogDebug("Create client [AK:{0},SK:{1},Vendor:{2}]", _configuration.AccessKeyId, _configuration.SecretAccessKey, _configuration.Vendor);
+                return _s3ClientBuilder.BuildClient(_configuration);
+            });
 
             if (client == null)
             {
