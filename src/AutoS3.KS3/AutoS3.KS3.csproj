@@ -1,21 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\build\common.props" />
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>AutoS3.KS3</AssemblyName>
-    <PackageId>AutoS3.KS3</PackageId>
-    <RootNamespace>AutoS3</RootNamespace>
-    <Description>AWSSDK.S3 SDK Client Manager</Description>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="AmazonKS3" Version="1.6.9" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\AutoS3\AutoS3.csproj" />
-  </ItemGroup>
- 
+	<Import Project="..\..\build\common.props" />
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>AutoS3.KS3</AssemblyName>
+		<PackageId>AutoS3.KS3</PackageId>
+		<RootNamespace>AutoS3</RootNamespace>
+		<Description>AWSSDK.S3 SDK Client Manager</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AmazonKS3" Version="1.7.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AutoS3\AutoS3.csproj" />
+	</ItemGroup>
+
 
 </Project>
