@@ -8,10 +8,7 @@
 
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu) [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/cocosip/AutoS3/blob/master/LICENSE) ![GitHub last commit](https://img.shields.io/github/last-commit/cocosip/AutoS3.svg) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/cocosip/AutoS3.svg)
 
-| Build Server | Platform | Build Status |
-| ------------ | -------- | ------------ |
-| Azure Pipelines| Windows |[![Build Status](https://dev.azure.com/cocosip/AutoS3/_apis/build/status/cocosip.AutoS3?branchName=master&jobName=Windows)](https://dev.azure.com/cocosip/AutoS3/_build/latest?definitionId=24&branchName=master)|
-| Azure Pipelines| Linux |[![Build Status](https://dev.azure.com/cocosip/AutoS3/_apis/build/status/cocosip.AutoS3?branchName=master&jobName=Linux)](https://dev.azure.com/cocosip/AutoS3/_build/latest?definitionId=24&branchName=master)
+[![build and publish](https://github.com/cocosip/AutoS3/actions/workflows/publish.yml/badge.svg)](https://github.com/cocosip/AutoS3/actions/workflows/publish.yml)
 
 | Package  | Version | Downloads|
 | -------- | ------- | -------- |
