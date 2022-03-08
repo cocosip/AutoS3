@@ -14,7 +14,7 @@ namespace AutoS3
         private readonly IS3ClientConfigurationSelector _configurationSelector;
         private readonly IS3ClientPoolFactory _s3ClientPoolFactory;
 
-        private readonly object _sync = new object();
+        private readonly object _sync = new();
         private readonly ConcurrentDictionary<string, IS3ClientPool> _s3ClientPools;
 
         /// <summary>

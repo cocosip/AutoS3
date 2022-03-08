@@ -38,14 +38,14 @@ namespace AutoS3.KS3
 
             if (configuration.Config is AmazonKS3Config kS3Config)
             {
-                IAmazonS3 client = new AmazonKS3Client(configuration.AccessKeyId, configuration.SecretAccessKey, kS3Config);
+                IAmazonS3 client = new AmazonKS3Client(
+                    configuration.AccessKeyId,
+                    configuration.SecretAccessKey,
+                    kS3Config);
                 return client;
             }
 
             throw new ArgumentException($"The configuration {configuration}, create ks3 client fail, config was not a type of 'AmazonKS3Config'! ");
-
         }
-
-
     }
 }
