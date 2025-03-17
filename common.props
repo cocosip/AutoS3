@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <Authors>virtual</Authors>
     <Product>AutoS3</Product>
     <PackageProjectUrl>https://github.com/cocosip/AutoS3</PackageProjectUrl>
