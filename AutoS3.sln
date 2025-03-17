@@ -17,6 +17,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoS3.Tests", "test\AutoS3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoS3.Sample", "samples\AutoS3.Sample\AutoS3.Sample.csproj", "{9CB91C85-D907-4AB1-B3B9-A2A984FE9D32}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solutions", "solutions", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		build\build-all-release.ps1 = build\build-all-release.ps1
+		common.props = common.props
+		build\common.ps1 = build\common.ps1
+		build\pack-all.ps1 = build\pack-all.ps1
+		build\test-all.ps1 = build\test-all.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{51DDB018-70E0-4581-948D-364AA8DF9672}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-test.yml = .github\workflows\build-and-test.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
